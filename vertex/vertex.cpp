@@ -1,58 +1,86 @@
 #include "vertex.h"
 
-void vertex::add_edge(int w, int c) {
-    std::shared_ptr<edge> new_edge = std::make_shared<edge>(w, c);
+void vertex::add_edge(const std::shared_ptr<vertex> &w, int c) {
+    auto new_edge = std::make_shared<edge>(w, c);
     new_edge->next = head;
     head = new_edge;
 }
 
-void vertex::delete_edge(const std::shared_ptr<edge> &curr, const std::shared_ptr<edge> &prev) {
+void vertex::delete_edge(std::shared_ptr<edge> &curr, std::shared_ptr<edge> &prev) {
     if (prev != nullptr)
         prev->next = curr->next;
     else
         head = curr->next;
 }
 
-void vertex::delete_edge(int v, bool decrement) {
-    std::shared_ptr<edge> curr = head;
+void vertex::delete_edge(const std::shared_ptr<vertex> &v) {
     std::shared_ptr<edge> prev = nullptr;
-
-    while (curr != nullptr) {
-        if (decrement && curr->node > v) {
-            --(curr->node);
-        } else if (curr->node == v) {
-            delete_edge(curr, prev);
-        }
-        prev = curr;
-        curr = curr->next;
-    }
-}
-
-void vertex::edit_edge(int v, int value) const {
-    std::shared_ptr<edge> curr = head;
-    while (curr != nullptr) {
-        if (curr->node == v) {
-            curr->value = value;
+    // Перебор всех узлов у данной вершины
+    for (edge_iterator it = begin(); it != vertex::end(); ++it) {
+        if (v == it->node) {
+            auto i = it.get_pointer();
+            delete_edge(i, prev);
             return;
         }
-        curr = curr->next;
+        prev = it.get_pointer();
     }
+
+//    std::shared_ptr<edge> curr = head;
+//    std::shared_ptr<edge> prev = nullptr;
+//
+//    while (curr != nullptr) {
+//        if (curr->node == v) {
+//            delete_edge(curr, prev);
+//            break
+//        }
+//        prev = curr;
+//        curr = curr->next;
+//    }
 }
 
-int vertex::first() const {
-    return head != nullptr ? head->node : -1;
+void vertex::edit_edge(const std::shared_ptr<vertex> &v, int value) {
+    for (edge_iterator it = begin(); it != vertex::end(); ++it) {
+        if (v == it->node) {
+            it->value = value;
+            return;
+        }
+    }
+
+//    std::shared_ptr<edge> curr = head;
+//    while (curr != nullptr) {
+//        if (curr->node == v) {
+//            curr->value = value;
+//            return;
+//        }
+//        curr = curr->next;
+//    }
 }
 
-int vertex::next(int i_from) const {
-    std::shared_ptr<edge> tmp = head;
-    while (tmp != nullptr) {
-        if (tmp->node == i_from)
-            break;
-        tmp = tmp->next;
+std::shared_ptr<vertex> vertex::first() {
+    return head != nullptr ? head->node : nullptr;
+}
+
+std::shared_ptr<vertex> vertex::next(const std::shared_ptr<vertex> &i_from) {
+    for (edge_iterator it = begin(); it != vertex::end(); ++it) {
+        if (it->node == i_from) {
+            ++it;
+            return it->node;
+        }
     }
-    return tmp != nullptr && tmp->next != nullptr ? tmp->next->node : -1;
+    return nullptr;
+//    std::shared_ptr<edge> tmp = head;
+//    while (tmp != nullptr) {
+//        if (tmp->node == i_from)
+//            break;
+//        tmp = tmp->next;
+//    }
+//    return tmp != nullptr && tmp->next != nullptr ? tmp->next->node : -1;
 }
 
 edge_iterator vertex::begin() {
     return edge_iterator(head);
+}
+
+edge_iterator vertex::end() {
+    return {};
 }

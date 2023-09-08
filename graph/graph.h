@@ -2,7 +2,6 @@
 
 #include "vertex/vertex.h"
 #include <vector>
-#include <vertex/vertex.h>
 
 
 class graph {
@@ -11,13 +10,7 @@ class graph {
 public:
     graph();
 
-    int first(int v);
-
-    int next(int v, int i);
-
-    vertex &get_vertex(int i);
-
-    int vertex_count() const;
+    vertex &get_vertex(char v);
 
     int index_of_vertex(char v) const;
 
@@ -33,11 +26,13 @@ public:
 
     void edit_edge(char v, char w, int value);
 
+    std::shared_ptr<vertex> first(char v);
+
+    std::shared_ptr<vertex> next(char v, std::shared_ptr<vertex> &i_from);
+
     edge_iterator begin(char v);
 
     edge_iterator begin(int v);
-
-    static edge_iterator end();
 
     friend std::ostream &operator<<(std::ostream &os, graph &g);
 };

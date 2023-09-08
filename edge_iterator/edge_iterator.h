@@ -2,17 +2,21 @@
 
 #include <iterator>
 #include <memory>
+#include <vertex/vertex.h>
+
+struct vertex;
 
 class edge {
 public:
-    int node;
+    std::shared_ptr<vertex> const node; // Указатель на вершину
     int value;
-    std::shared_ptr<edge> next;
+    std::shared_ptr<edge> next; // Указатель на следующий узел
 
-    edge(int node, int value) : node(node), value(value), next(nullptr) {
+    edge(const std::shared_ptr<vertex> &node, int value) : node(node), value(value), next(nullptr) {
     }
 };
 
+// Итератор для обхода через цикл for по смежным вершинам
 class edge_iterator {
     std::shared_ptr<edge> ptr;
 public:
@@ -25,10 +29,14 @@ public:
     edge_iterator() : ptr(nullptr) {}
 
     explicit edge_iterator(std::shared_ptr<edge> &ptr);
-    
-    std::shared_ptr<edge> operator->() const;
+
+    edge &operator*();
+
+    std::shared_ptr<edge> operator->();
 
     edge_iterator &operator++();
 
-    bool operator!=(const edge_iterator &a);
+    bool operator!=(const edge_iterator &a) const;
+
+    std::shared_ptr<edge> get_pointer();
 };

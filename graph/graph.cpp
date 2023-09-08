@@ -5,10 +5,6 @@ graph::graph() {
     list_ = std::vector<vertex>(0);
 }
 
-int graph::vertex_count() const {
-    return list_.size();
-}
-
 int graph::index_of_vertex(char v) const {
     for (auto i = list_.begin(); i < list_.end(); ++i)
         if (i->name == v)
@@ -17,53 +13,53 @@ int graph::index_of_vertex(char v) const {
 }
 
 void graph::add_vertex(char name, int mark) {
-    list_.emplace_back(name, mark);
+    list_.emplace_back(name);
 }
 
 void graph::add_edge(char v, char w, int value) {
-    int v_index = index_of_vertex(v);
-    int w_index = index_of_vertex(w);
-    list_.at(v_index).add_edge(w_index, value);
+    vertex &w_vertex = get_vertex(w);
+//    std::shared_ptr<vertex> p1 =
+    auto w_ptr = std::shared_ptr<vertex>(&w_vertex);
+    get_vertex(v).add_edge(w_ptr, value);
 }
 
 void graph::delete_vertex(char v) {
-    int index = index_of_vertex(v);
-
+    auto v_ptr = std::make_shared<vertex>(v);
     for (auto i = list_.begin(); i < list_.end(); ++i)
         if (i->name != v) {
-            i->delete_edge(index, true);
+            vertex &w_vertex = get_vertex(i->name);
+            w_vertex.delete_edge(v_ptr);
         }
-
-    list_.erase(index + list_.begin());
+    list_.erase(index_of_vertex(v) + list_.begin());
 }
 
 void graph::delete_edge(char v, char w) {
-    int v_index = index_of_vertex(v);
-    int w_index = index_of_vertex(w);
-    list_.at(v_index).delete_edge(w_index);
+    vertex &w_vertex = get_vertex(w);
+    auto w_ptr = std::make_shared<vertex>(w_vertex);
+    get_vertex(v).delete_edge(w_ptr);
 }
 
 void graph::edit_vertex(char name, int mark) {
-    int index = index_of_vertex(name);
-    list_.at(index).mark = mark;
+    vertex &v = get_vertex(name);
+    v.mark = mark;
 }
 
 void graph::edit_edge(char v, char w, int value) {
-    int v_index = index_of_vertex(v);
-    int w_index = index_of_vertex(w);
-    list_.at(v_index).edit_edge(w_index, value);
+    auto w_ptr = std::make_shared<vertex>(get_vertex(w));
+    get_vertex(v).edit_edge(w_ptr, value);
 }
 
-int graph::first(int v) {
+std::shared_ptr<vertex> graph::first(char v) {
     return get_vertex(v).first();
 }
 
-int graph::next(int v, int i_from) {
-    return list_.at(v).next(i_from);
+std::shared_ptr<vertex> graph::next(char v, std::shared_ptr<vertex> &i_from) {
+    return get_vertex(v).next(i_from);
 }
 
-vertex &graph::get_vertex(int i) {
-    return list_.at(i);
+vertex &graph::get_vertex(char v) {
+    int index = index_of_vertex(v);
+    return list_.at(index);
 }
 
 edge_iterator graph::begin(int v) {
@@ -71,23 +67,20 @@ edge_iterator graph::begin(int v) {
 }
 
 edge_iterator graph::begin(char v) {
-    return list_.at(index_of_vertex(v)).begin();
-}
-
-edge_iterator graph::end() {
-    return {};
+    return get_vertex(v).begin();
 }
 
 std::ostream &operator<<(std::ostream &os, graph &g) {
     for (int i = 0; i < g.list_.size(); ++i) {
         os << g.list_.at(i).name << ": ";
-        for (edge_iterator it = g.begin(i), end = graph::end(); it != end; ++it) {
-            std::cout << g.list_.at(it->node).name << "(" << it->value << "), ";
+        for (edge_iterator it = g.begin(i), end = vertex::end(); it != end; ++it) {
+            std::cout << it->node->name << "(" << it->value << "), ";
         }
         os << std::endl;
     }
     return os;
 }
+
 
 
 
