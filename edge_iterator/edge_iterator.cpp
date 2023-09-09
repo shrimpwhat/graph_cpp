@@ -1,6 +1,6 @@
 #include "edge_iterator.h"
 
-edge_iterator::edge_iterator(std::shared_ptr<edge> &ptr) : ptr(ptr) {
+edge_iterator::edge_iterator(const std::shared_ptr<edge> &ptr) : ptr(ptr) {
 }
 
 edge &edge_iterator::operator*() {

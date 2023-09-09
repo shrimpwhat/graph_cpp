@@ -8,11 +8,11 @@ struct vertex;
 
 class edge {
 public:
-    std::shared_ptr<vertex> const node; // Указатель на вершину
+    const vertex &node; // Ссылка на вершину
     int value;
     std::shared_ptr<edge> next; // Указатель на следующий узел
 
-    edge(const std::shared_ptr<vertex> &node, int value) : node(node), value(value), next(nullptr) {
+    edge(const vertex &node, int value) : node(node), value(value), next(nullptr) {
     }
 };
 
@@ -28,7 +28,7 @@ public:
 
     edge_iterator() : ptr(nullptr) {}
 
-    explicit edge_iterator(std::shared_ptr<edge> &ptr);
+    explicit edge_iterator(const std::shared_ptr<edge> &ptr);
 
     edge &operator*();
 
