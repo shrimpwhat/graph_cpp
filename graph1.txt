@@ -1,0 +1,8 @@
+ABCDE
+A B 1
+A C 2
+B C 3
+C D 4
+D A 5
+A D 1
+E B 9

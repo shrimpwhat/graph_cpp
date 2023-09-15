@@ -1,6 +1,6 @@
 #include "vertex.h"
 
-void vertex::add_edge(const vertex &w, int c) {
+void vertex::add_edge(vertex &w, int c) {
     auto new_edge = std::make_shared<edge>(w, c);
     new_edge->next = head;
     head = new_edge;

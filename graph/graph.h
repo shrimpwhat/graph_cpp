@@ -8,9 +8,9 @@ class graph {
     std::list<vertex> list_;
 
     // Возвращают итератор на вершину из текущего списка вершин
-    std::list<vertex>::const_iterator get_iterator(char v) const;
+    [[nodiscard]] std::list<vertex>::const_iterator get_iterator(char v) const;
 
-    std::list<vertex>::const_iterator get_iterator(const vertex &v) const;
+    [[nodiscard]] std::list<vertex>::const_iterator get_iterator(const vertex &v) const;
 
 public:
     graph();
@@ -34,7 +34,7 @@ public:
 
     std::shared_ptr<vertex> next(char v, std::shared_ptr<vertex> &i_from);
 
-    // Альтернативное решение через итераторы(для обхода по всем узлам вершины)
+    // Альтернативное решение через итераторы(для обхода по всем дугам для данной вершины)
     edge_iterator begin(char v);
 
     edge_iterator begin(const vertex &v);

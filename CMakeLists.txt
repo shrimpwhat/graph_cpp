@@ -1,11 +1,12 @@
 cmake_minimum_required(VERSION 3.26)
-project(Graph)
+project(graph_cpp)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 
 include_directories(.)
 
-add_executable(Graph
+add_executable(
+        graph_cpp
         main.cpp
         edge_iterator/edge_iterator.cpp
         vertex/vertex.cpp

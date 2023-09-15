@@ -14,20 +14,20 @@ public:
 
     vertex() : name(), mark() {};
 
-    explicit vertex(char name, const int mark = 0) : name(name), mark(mark) {
+    explicit vertex(char name, int mark = 0) : name(name), mark(mark) {
     }
 
-    void add_edge(const vertex &v, int c);
+    void add_edge(vertex &v, int c);
 
     /**
-     * Удаляет узел curr и сдвигает оставшиеся узлы в prev
-     * @param curr Узел, который необходимо удалить
-     * @param prev Узел перед curr
+     * Удаляет дугу curr и сдвигает оставшиеся дуги в prev
+     * @param curr Дуга, которая необходимо удалить
+     * @param prev Дуга перед curr
     */
     void delete_edge(std::shared_ptr<edge> &curr, std::shared_ptr<edge> &prev);
 
     /**
-     * Удаляет узел между данной вершиной и вершиной v
+     * Удаляет дугу между данной вершиной и вершиной v
      * @param v Вершина, которая связана с данной
      */
     void delete_edge(const vertex &v);
@@ -39,8 +39,8 @@ public:
 
     std::shared_ptr<vertex> next(const std::shared_ptr<vertex> &i_from);
 
-    // Альтернативное решение через итераторы(для обхода по всем узлам вершины)
-    edge_iterator begin() const;
+    // Альтернативное решение через итераторы(для обхода по всем дугам данной вершины)
+    [[nodiscard]] edge_iterator begin() const;
 
     static edge_iterator end();
 };
