@@ -48,7 +48,7 @@ std::list<vertex>::const_iterator graph::get_iterator(char v) const {
         if (i->name == v)
             return i;
     std::string name{v};
-    throw std::runtime_error("Missing vertex " + name + " int graph");
+    throw std::runtime_error("Missing vertex " + name + " in graph");
 }
 
 std::list<vertex>::const_iterator graph::get_iterator(const vertex &v) const {
@@ -60,7 +60,7 @@ vertex &graph::get_vertex(char v) {
         if (node.name == v)
             return node;
     std::string name{v};
-    throw std::runtime_error("Missing vertex " + name + " int graph");
+    throw std::runtime_error("Missing vertex " + name + " in graph");
 }
 
 edge_iterator graph::begin(char v) {
@@ -85,4 +85,14 @@ std::ostream &operator<<(std::ostream &os, graph &g) {
     }
     return os;
 }
+
+vertex *graph::get_unvisited_vertex() {
+    for (auto &i: list_)
+        if (i.mark == 0) {
+            return &i;
+        }
+    return nullptr;
+}
+
+
 

@@ -1,8 +1,8 @@
-ABCDE
+ABCDEF
 A B 1
-A C 2
-B C 3
-C D 4
-D A 5
-A D 1
-E B 9
+A C 1
+B E 1
+C D 1
+D B 1
+D E 1
+E F 1

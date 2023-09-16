@@ -11,4 +11,5 @@ add_executable(
         edge_iterator/edge_iterator.cpp
         vertex/vertex.cpp
         graph/graph.cpp
+        utils.h
 )

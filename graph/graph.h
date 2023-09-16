@@ -42,4 +42,8 @@ public:
     static edge_iterator end();
 
     friend std::ostream &operator<<(std::ostream &os, graph &g);
+
+    // Если BFS не сможет попасть в какую либо вершину, то будем запускать BFS для каждой непосещённой
+    [[nodiscard]] vertex *get_unvisited_vertex();
 };
+
