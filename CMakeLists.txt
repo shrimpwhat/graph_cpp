@@ -8,7 +8,6 @@ include_directories(.)
 add_executable(
         graph_cpp
         main.cpp
-        edge_iterator/edge_iterator.cpp
         vertex/vertex.cpp
         graph/graph.cpp
         utils.h

@@ -1,21 +1,17 @@
 ﻿#pragma once
 
 #include "vertex/vertex.h"
-#include <list>
+#include <forward_list>
+#include <iostream>
 
 
 class graph {
-    std::list<vertex> list_;
-
-    // Возвращают итератор на вершину из текущего списка вершин
-    [[nodiscard]] std::list<vertex>::const_iterator get_iterator(char v) const;
-
-    [[nodiscard]] std::list<vertex>::const_iterator get_iterator(const vertex &v) const;
-
 public:
+    std::forward_list<vertex> list_;
+
     graph();
 
-    vertex &get_vertex(char v);
+    std::forward_list<vertex>::iterator get_vertex(char v);
 
     void add_vertex(char name, int mark = 0);
 
@@ -29,21 +25,12 @@ public:
 
     void edit_edge(char v, char w, int value);
 
-    // Методы first и next из задания(не использую)
-    std::shared_ptr<vertex> first(char v);
+    std::forward_list<edge>::iterator first(char v);
 
-    std::shared_ptr<vertex> next(char v, std::shared_ptr<vertex> &i_from);
-
-    // Альтернативное решение через итераторы(для обхода по всем дугам для данной вершины)
-    edge_iterator begin(char v);
-
-    edge_iterator begin(const vertex &v);
-
-    static edge_iterator end();
+    static std::forward_list<edge>::iterator next(const std::forward_list<edge>::iterator &from);
 
     friend std::ostream &operator<<(std::ostream &os, graph &g);
 
-    // Если BFS не сможет попасть в какую либо вершину, то будем запускать BFS для каждой непосещённой
-    [[nodiscard]] vertex *get_unvisited_vertex();
+    std::forward_list<edge>::iterator end(char v);
 };
 

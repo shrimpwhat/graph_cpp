@@ -1,16 +1,25 @@
 #pragma once
 
-#include "edge_iterator/edge_iterator.h"
+#include <forward_list>
+#include <iostream>
 
-class edge;
+class vertex;
 
-class edge_iterator;
+// Класс дуги
+class edge {
+public:
+    vertex &node; // Ссылка на вершину
+    int value;
 
+    edge(vertex &v, int c) : node(v), value(c) {}
+};
+
+// Класс вершины
 class vertex {
 public:
     char name;
     int mark;
-    std::shared_ptr<edge> head;
+    std::forward_list<edge> edges; // Однонаправленный линейно-связанный список дуг, исходящих из данной вершины
 
     vertex() : name(), mark() {};
 
@@ -19,28 +28,15 @@ public:
 
     void add_edge(vertex &v, int c);
 
-    /**
-     * Удаляет дугу curr и сдвигает оставшиеся дуги в prev
-     * @param curr Дуга, которая необходимо удалить
-     * @param prev Дуга перед curr
-    */
-    void delete_edge(std::shared_ptr<edge> &curr, std::shared_ptr<edge> &prev);
-
-    /**
-     * Удаляет дугу между данной вершиной и вершиной v
-     * @param v Вершина, которая связана с данной
-     */
     void delete_edge(const vertex &v);
 
     void edit_edge(const vertex &v, int value);
 
-    // Методы first и next из задания(не использую)
-    std::shared_ptr<vertex> first();
+    std::forward_list<edge>::iterator first();
 
-    std::shared_ptr<vertex> next(const std::shared_ptr<vertex> &i_from);
+    static std::forward_list<edge>::iterator next(const std::forward_list<edge>::iterator &from);
 
-    // Альтернативное решение через итераторы(для обхода по всем дугам данной вершины)
-    [[nodiscard]] edge_iterator begin() const;
+    friend std::ostream &operator<<(std::ostream &os, vertex &v);
 
-    static edge_iterator end();
+    std::forward_list<edge>::iterator end();
 };
